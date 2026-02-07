@@ -8,6 +8,10 @@
 <style>
 * { box-sizing: border-box; }
 
+:root {
+    --safe-bottom: env(safe-area-inset-bottom);
+}
+
 body {
     min-height: 100vh;
     margin: 0;
@@ -48,6 +52,7 @@ button {
     background: transparent;
     color: #bfaaff;
     cursor: pointer;
+    touch-action: manipulation;
 }
 </style>
 </head>
@@ -70,8 +75,13 @@ function moveButton() {
     const buttonWidth = noButton.offsetWidth;
     const buttonHeight = noButton.offsetHeight;
 
+    const safeBottom = parseInt(
+        getComputedStyle(document.documentElement)
+            .getPropertyValue("--safe-bottom")
+    ) || 40; // fallback dla starszego Safari
+
     const maxX = window.innerWidth - buttonWidth - margin;
-    const maxY = window.innerHeight - buttonHeight - margin;
+    const maxY = window.innerHeight - buttonHeight - margin - safeBottom;
 
     const x = Math.max(margin, Math.random() * maxX);
     const y = Math.max(margin, Math.random() * maxY);
@@ -84,9 +94,9 @@ function moveButton() {
 // desktop
 noButton.addEventListener("mouseenter", moveButton);
 
-// mobile
-noButton.addEventListener("touchstart", function(e) {
-    e.preventDefault(); // kluczowe na telefonie
+// mobile Safari
+noButton.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     moveButton();
 });
 
