@@ -2,11 +2,15 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Walentynki</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
 body {
     min-height: 100vh;
@@ -21,27 +25,25 @@ body {
 }
 
 .card {
-    position: relative; /* KLUCZOWE */
+    position: relative;
+    width: 340px;
+    height: 260px; /* DUŻY OBSZAR */
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(14px);
     border-radius: 24px;
-    padding: 48px 40px;
+    padding: 32px 24px;
     text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    width: 320px;
 }
 
 h1 {
     color: #d6c7ff;
-    margin-bottom: 36px;
-}
-
-.buttons {
-    position: relative; /* KLUCZOWE */
-    height: 80px;
+    font-size: 1.2rem;
+    margin-bottom: 24px;
 }
 
 button {
+    position: absolute;
     padding: 14px 32px;
     font-size: 1rem;
     border-radius: 999px;
@@ -50,42 +52,47 @@ button {
     color: #bfaaff;
     cursor: pointer;
     touch-action: manipulation;
+    outline: none;
+    user-select: none;
+    -webkit-text-size-adjust: 100%;
+}
+
+#yesButton {
+    left: 24px;
+    bottom: 24px;
 }
 
 #noButton {
-    position: absolute;
-    right: 0;
-    top: 0;
+    right: 24px;
+    bottom: 24px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="card" id="card">
     <h1>Czy zostaniesz moją Walentynką? 💜</h1>
 
-    <div class="buttons" id="buttonsBox">
-        <button onclick="goToCongrats()">Tak</button>
-        <button id="noButton">Nie</button>
-    </div>
+    <button id="yesButton" onclick="goToCongrats()">Tak</button>
+    <button id="noButton">Nie</button>
 </div>
 
 <script>
 const noButton = document.getElementById("noButton");
-const box = document.getElementById("buttonsBox");
+const card = document.getElementById("card");
 
 function moveButton() {
-    const margin = 8;
+    const margin = 12;
 
-    const boxW = box.clientWidth;
-    const boxH = box.clientHeight;
+    const cardW = card.clientWidth;
+    const cardH = card.clientHeight;
 
     const btnW = noButton.offsetWidth;
     const btnH = noButton.offsetHeight;
 
-    const maxX = boxW - btnW - margin;
-    const maxY = boxH - btnH - margin;
+    const maxX = cardW - btnW - margin;
+    const maxY = cardH - btnH - margin;
 
     const x = margin + Math.random() * maxX;
     const y = margin + Math.random() * maxY;
