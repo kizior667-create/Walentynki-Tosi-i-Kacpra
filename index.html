@@ -26,12 +26,12 @@ body {
 
 .card {
     position: relative;
-    width: 340px;
-    height: 260px; /* DUŻY OBSZAR */
+    width: 360px;
+    height: 260px;
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(14px);
     border-radius: 24px;
-    padding: 32px 24px;
+    padding: 24px;
     text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
@@ -42,19 +42,30 @@ h1 {
     margin-bottom: 24px;
 }
 
+/* 🔒 ZAMROŻONY PRZYCISK */
 button {
     position: absolute;
-    padding: 14px 32px;
+    width: 96px;
+    height: 44px;
+    line-height: 44px;
     font-size: 1rem;
     border-radius: 999px;
     border: 2px solid #bfaaff;
     background: transparent;
     color: #bfaaff;
     cursor: pointer;
-    touch-action: manipulation;
-    outline: none;
+
+    /* ZABIJA POWIĘKSZANIE */
     user-select: none;
+    outline: none;
+    transform: none !important;
+    transition: none !important;
     -webkit-text-size-adjust: 100%;
+}
+
+/* ZABIJA :active W SAFARI */
+button:active {
+    transform: none !important;
 }
 
 #yesButton {
@@ -83,7 +94,7 @@ const noButton = document.getElementById("noButton");
 const card = document.getElementById("card");
 
 function moveButton() {
-    const margin = 12;
+    const margin = 16;
 
     const cardW = card.clientWidth;
     const cardH = card.clientHeight;
@@ -91,11 +102,12 @@ function moveButton() {
     const btnW = noButton.offsetWidth;
     const btnH = noButton.offsetHeight;
 
+    const minY = 80; // ❗ poniżej tekstu
     const maxX = cardW - btnW - margin;
     const maxY = cardH - btnH - margin;
 
     const x = margin + Math.random() * maxX;
-    const y = margin + Math.random() * maxY;
+    const y = minY + Math.random() * (maxY - minY);
 
     noButton.style.left = x + "px";
     noButton.style.top  = y + "px";
