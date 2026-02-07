@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Walentynki</title>
+
+<meta http-equiv="refresh" content="10;url=index.html">
+
+<title>Gratulacje</title>
 
 <style>
     * { box-sizing: border-box; }
@@ -27,41 +30,29 @@
         text-align: center;
         backdrop-filter: blur(14px);
         box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        animation: fadeIn 1s ease;
+        animation: fadeIn 1.2s ease;
     }
 
     h1 {
         color: #d6c7ff;
-        font-size: 2.2rem;
-        margin-bottom: 36px;
+        font-size: 2.4rem;
+        margin-bottom: 20px;
     }
 
-    .buttons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        flex-wrap: wrap;
+    .hearts {
+        font-size: 3rem;
+        animation: float 2s ease-in-out infinite alternate;
     }
 
-    button {
-        padding: 14px 32px;
-        font-size: 1rem;
-        border-radius: 999px;
-        border: 2px solid #bfaaff;
-        background: transparent;
-        color: #bfaaff;
-        cursor: pointer;
-        transition: all 0.3s ease;
+    .sub {
+        opacity: 0.6;
+        margin-top: 28px;
+        font-size: 0.9rem;
     }
 
-    button:hover {
-        background: #bfaaff;
-        color: #000;
-        transform: translateY(-2px);
-    }
-
-    #noButton {
-        position: relative;
+    @keyframes float {
+        from { transform: translateY(0); }
+        to   { transform: translateY(-20px); }
     }
 
     @keyframes fadeIn {
@@ -79,28 +70,12 @@
 
 <body>
 <div class="card">
-    <h1>Czy zostaniesz moją Walentynką? 💜</h1>
-
-    <div class="buttons">
-        <button onclick="goToCongrats()">Tak</button>
-        <button id="noButton">Nie</button>
-    </div>
+    <h1>Gratulacje 💜</h1>
+    <div>zostałaś moją Walentynką</div>
+    <div class="hearts">❤️ 💜 ❤️ 💜 ❤️</div>
+    <div class="sub">wracamy za chwilę…</div>
 </div>
-
-<script>
-const noButton = document.getElementById('noButton');
-
-noButton.addEventListener('mouseenter', () => {
-    const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
-    noButton.style.position = 'fixed';
-    noButton.style.left = x + 'px';
-    noButton.style.top = y + 'px';
-});
-
-function goToCongrats() {
-    window.location.href = 'congrats.html';
-}
-</script>
 </body>
 </html>
+</html>
+
