@@ -9,25 +9,36 @@
 * { box-sizing: border-box; }
 
 body {
-    min-height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
     background: radial-gradient(circle at top, #2b2147, #000);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     color: #fff;
     overflow: hidden;
 }
 
+/* FAKE VIEWPORT – zawsze równy temu co WIDAĆ */
+#viewport {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
+/* karta */
 .card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(14px);
     border-radius: 24px;
     padding: 48px 40px;
     text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    z-index: 10;
+    pointer-events: auto;
 }
 
 h1 {
@@ -56,47 +67,61 @@ button {
 
 <body>
 
-<div class="card">
-    <h1>Czy zostaniesz moją Walentynką? 💜</h1>
-    <div class="buttons">
-        <button onclick="goToCongrats()">Tak</button>
-        <button id="noButton">Nie</button>
+<div id="viewport">
+    <div class="card">
+        <h1>Czy zostaniesz moją Walentynką? 💜</h1>
+        <div class="buttons">
+            <button onclick="goToCongrats()">Tak</button>
+            <button id="noButton">Nie</button>
+        </div>
     </div>
 </div>
 
 <script>
 const noButton = document.getElementById("noButton");
+const viewport = document.getElementById("viewport");
+
+function syncViewport() {
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    viewport.style.width = vv.width + "px";
+    viewport.style.height = vv.height + "px";
+    viewport.style.transform = `translate(${vv.offsetLeft}px, ${vv.offsetTop}px)`;
+}
+
+// SYNC przy KAŻDEJ zmianie Safari
+if (window.visualViewport) {
+    visualViewport.addEventListener("resize", syncViewport);
+    visualViewport.addEventListener("scroll", syncViewport);
+}
+syncViewport();
 
 function moveButton() {
     const margin = 16;
 
+    const vpW = viewport.clientWidth;
+    const vpH = viewport.clientHeight;
+
     const btnW = noButton.offsetWidth;
     const btnH = noButton.offsetHeight;
 
-    const vv = window.visualViewport;
+    const maxX = vpW - btnW - margin;
+    const maxY = vpH - btnH - margin;
 
-    const viewportWidth  = vv ? vv.width  : window.innerWidth;
-    const viewportHeight = vv ? vv.height : window.innerHeight;
+    const x = margin + Math.random() * maxX;
+    const y = margin + Math.random() * maxY;
 
-    const offsetLeft = vv ? vv.offsetLeft : 0;
-    const offsetTop  = vv ? vv.offsetTop  : 0;
-
-    const maxX = viewportWidth  - btnW - margin;
-    const maxY = viewportHeight - btnH - margin;
-
-    const x = offsetLeft + margin + Math.random() * maxX;
-    const y = offsetTop  + margin + Math.random() * maxY;
-
-    noButton.style.position = "fixed";
-    noButton.style.left = `${x}px`;
-    noButton.style.top  = `${y}px`;
+    noButton.style.position = "absolute";
+    noButton.style.left = x + "px";
+    noButton.style.top  = y + "px";
 }
 
 // desktop
 noButton.addEventListener("mouseenter", moveButton);
 
-// mobile (Safari / iOS)
-noButton.addEventListener("touchstart", (e) => {
+// mobile
+noButton.addEventListener("touchstart", e => {
     e.preventDefault();
     moveButton();
 });
